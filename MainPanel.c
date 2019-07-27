@@ -25,13 +25,18 @@ typedef struct MainPanel_ {
    pid_t pidSearch;
 } MainPanel;
 
-typedef bool(*MainPanel_ForeachProcessFn)(Process*, size_t);
+typedef union {
+   int i;
+   void* v;
+} Arg;
+
+typedef bool(*MainPanel_ForeachProcessFn)(Process*, Arg);
 
 #define MainPanel_getFunctionBar(this_) (((Panel*)(this_))->defaultBar)
 
 }*/
 
-static const char* MainFunctions[]  = {"Help  ", "Setup ", "Search", "Filter", "Tree  ", "SortBy", "Nice -", "Nice +", "Kill  ", "Quit  ", NULL};
+static const char* const MainFunctions[]  = {"Help  ", "Setup ", "Search", "Filter", "Tree  ", "SortBy", "Nice -", "Nice +", "Kill  ", "Quit  ", NULL};
 
 void MainPanel_updateTreeFunctions(MainPanel* this, bool mode) {
    FunctionBar* bar = MainPanel_getFunctionBar(this);
@@ -148,7 +153,7 @@ const char* MainPanel_getValue(MainPanel* this, int i) {
    return "";
 }
 
-bool MainPanel_foreachProcess(MainPanel* this, MainPanel_ForeachProcessFn fn, size_t arg, bool* wasAnyTagged) {
+bool MainPanel_foreachProcess(MainPanel* this, MainPanel_ForeachProcessFn fn, Arg arg, bool* wasAnyTagged) {
    Panel* super = (Panel*) this;
    bool ok = true;
    bool anyTagged = false;

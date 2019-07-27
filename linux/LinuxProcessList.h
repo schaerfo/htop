@@ -9,6 +9,14 @@ Released under the GNU GPL, see the COPYING file
 in the source distribution for its full text.
 */
 
+#ifdef MAJOR_IN_MKDEV
+#elif defined(MAJOR_IN_SYSMACROS) || \
+   (defined(HAVE_SYS_SYSMACROS_H) && HAVE_SYS_SYSMACROS_H)
+#endif
+
+#ifdef HAVE_DELAYACCT
+#endif
+
 
 #include "ProcessList.h"
 
@@ -54,6 +62,10 @@ typedef struct LinuxProcessList_ {
    CPUData* cpus;
    TtyDriver* ttyDrivers;
    
+   #ifdef HAVE_DELAYACCT
+   struct nl_sock *netlink_socket;
+   int netlink_family;
+   #endif
 } LinuxProcessList;
 
 #ifndef PROCDIR
@@ -86,6 +98,9 @@ typedef struct LinuxProcessList_ {
 #endif
 
 #define CLOCK_MASK "cpu MHz"
+#ifdef HAVE_DELAYACCT
+
+#endif
 
 ProcessList* ProcessList_new(UsersTable* usersTable, Hashtable* pidWhiteList, uid_t userId);
 
@@ -108,6 +123,9 @@ void ProcessList_delete(ProcessList* pl);
 
 #endif
 
+#ifdef HAVE_DELAYACCT
+
+#endif
 
 void ProcessList_goThroughEntries(ProcessList* super);
 
