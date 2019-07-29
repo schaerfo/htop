@@ -39,6 +39,109 @@ in the source distribution for its full text.
 #define ColorPairGrayBlack ColorPair(Magenta,Magenta)
 #define ColorIndexGrayBlack ColorIndex(Magenta,Magenta)
 
+#define KEY_WHEELUP KEY_F(20)
+#define KEY_WHEELDOWN KEY_F(21)
+#define KEY_RECLICK KEY_F(22)
+
+//#link curses
+
+/*{
+#include <stdbool.h>
+
+typedef enum TreeStr_ {
+   TREE_STR_HORZ,
+   TREE_STR_VERT,
+   TREE_STR_RTEE,
+   TREE_STR_BEND,
+   TREE_STR_TEND,
+   TREE_STR_OPEN,
+   TREE_STR_SHUT,
+   TREE_STR_COUNT
+} TreeStr;
+
+typedef enum ColorSchemes_ {
+   COLORSCHEME_DEFAULT = 0,
+   COLORSCHEME_MONOCHROME = 1,
+   COLORSCHEME_BLACKONWHITE = 2,
+   COLORSCHEME_LIGHTTERMINAL = 3,
+   COLORSCHEME_MIDNIGHT = 4,
+   COLORSCHEME_BLACKNIGHT = 5,
+   COLORSCHEME_BROKENGRAY = 6,
+   LAST_COLORSCHEME = 7,
+} ColorSchemes;
+
+typedef enum ColorElements_ {
+   RESET_COLOR,
+   DEFAULT_COLOR,
+   FUNCTION_BAR,
+   FUNCTION_KEY,
+   FAILED_SEARCH,
+   PANEL_HEADER_FOCUS,
+   PANEL_HEADER_UNFOCUS,
+   PANEL_SELECTION_FOCUS,
+   PANEL_SELECTION_FOLLOW,
+   PANEL_SELECTION_UNFOCUS,
+   LARGE_NUMBER,
+   METER_TEXT,
+   METER_VALUE,
+   LED_COLOR,
+   UPTIME,
+   BATTERY,
+   TASKS_RUNNING,
+   TEMPERATURE_COOL,
+   TEMPERATURE_MEDIUM,
+   TEMPERATURE_HOT,
+   SWAP,
+   PROCESS,
+   PROCESS_SHADOW,
+   PROCESS_TAG,
+   PROCESS_MEGABYTES,
+   PROCESS_TREE,
+   PROCESS_R_STATE,
+   PROCESS_D_STATE,
+   PROCESS_BASENAME,
+   PROCESS_HIGH_PRIORITY,
+   PROCESS_LOW_PRIORITY,
+   PROCESS_THREAD,
+   PROCESS_THREAD_BASENAME,
+   BAR_BORDER,
+   BAR_SHADOW,
+   GRAPH_1,
+   GRAPH_2,
+   MEMORY_USED,
+   MEMORY_BUFFERS,
+   MEMORY_BUFFERS_TEXT,
+   MEMORY_CACHE,
+   LOAD,
+   LOAD_AVERAGE_FIFTEEN,
+   LOAD_AVERAGE_FIVE,
+   LOAD_AVERAGE_ONE,
+   CHECK_BOX,
+   CHECK_MARK,
+   CHECK_TEXT,
+   CLOCK,
+   HELP_BOLD,
+   HOSTNAME,
+   CPU_NICE,
+   CPU_NICE_TEXT,
+   CPU_NORMAL,
+   CPU_KERNEL,
+   CPU_IOWAIT,
+   CPU_IRQ,
+   CPU_SOFTIRQ,
+   CPU_STEAL,
+   CPU_GUEST,
+   LAST_COLORELEMENT
+} ColorElements;
+
+void CRT_fatalError(const char* note) __attribute__ ((noreturn));
+
+void CRT_handleSIGSEGV(int sgn);
+
+#define KEY_ALT(x) (KEY_F(64 - 26) + (x - 'A'))
+
+}*/
+
 const char *CRT_treeStrAscii[TREE_STR_COUNT] = {
    "-", // TREE_STR_HORZ
    "|", // TREE_STR_VERT
@@ -94,6 +197,9 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
       [METER_VALUE] = A_BOLD | ColorPair(Cyan,Black),
       [LED_COLOR] = ColorPair(Green,Black),
       [TASKS_RUNNING] = A_BOLD | ColorPair(Green,Black),
+      [TEMPERATURE_COOL] = A_DIM | ColorPair(Green,Black),
+      [TEMPERATURE_MEDIUM] = A_NORMAL | ColorPair(Yellow,Black),
+      [TEMPERATURE_HOT] = A_BOLD | ColorPair(Red,Black),
       [PROCESS] = A_NORMAL,
       [PROCESS_SHADOW] = A_BOLD | ColorPairGrayBlack,
       [PROCESS_TAG] = A_BOLD | ColorPair(Yellow,Black),
@@ -163,6 +269,9 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
       [METER_VALUE] = A_BOLD,
       [LED_COLOR] = A_NORMAL,
       [TASKS_RUNNING] = A_BOLD,
+      [TEMPERATURE_COOL] = A_DIM,
+      [TEMPERATURE_MEDIUM] = A_NORMAL,
+      [TEMPERATURE_HOT] = A_BOLD,
       [PROCESS] = A_NORMAL,
       [PROCESS_SHADOW] = A_DIM,
       [PROCESS_TAG] = A_BOLD,
@@ -232,6 +341,9 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
       [METER_VALUE] = ColorPair(Black,White),
       [LED_COLOR] = ColorPair(Green,White),
       [TASKS_RUNNING] = ColorPair(Green,White),
+      [TEMPERATURE_COOL] = ColorPair(Green,White),
+      [TEMPERATURE_MEDIUM] = ColorPair(Yellow,White),
+      [TEMPERATURE_HOT] = ColorPair(Red,White),
       [PROCESS] = ColorPair(Black,White),
       [PROCESS_SHADOW] = A_BOLD | ColorPair(Black,White),
       [PROCESS_TAG] = ColorPair(White,Blue),
@@ -301,6 +413,9 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
       [METER_VALUE] = ColorPair(Black,Black),
       [LED_COLOR] = ColorPair(Green,Black),
       [TASKS_RUNNING] = ColorPair(Green,Black),
+      [TEMPERATURE_COOL] = ColorPair(Green,Black),
+      [TEMPERATURE_MEDIUM] = ColorPair(Yellow,Black),
+      [TEMPERATURE_HOT] = ColorPair(Red,Black),
       [PROCESS] = ColorPair(Black,Black),
       [PROCESS_SHADOW] = A_BOLD | ColorPairGrayBlack,
       [PROCESS_TAG] = ColorPair(White,Blue),
@@ -370,6 +485,9 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
       [METER_VALUE] = A_BOLD | ColorPair(Cyan,Blue),
       [LED_COLOR] = ColorPair(Green,Blue),
       [TASKS_RUNNING] = A_BOLD | ColorPair(Green,Blue),
+      [TEMPERATURE_COOL] = A_DIM | ColorPair(Green,Blue),
+      [TEMPERATURE_MEDIUM] = A_NORMAL | ColorPair(Yellow,Blue),
+      [TEMPERATURE_HOT] = A_BOLD | ColorPair(Red,Blue),
       [PROCESS] = ColorPair(White,Blue),
       [PROCESS_SHADOW] = A_BOLD | ColorPair(Black,Blue),
       [PROCESS_TAG] = A_BOLD | ColorPair(Yellow,Blue),
@@ -439,6 +557,9 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
       [METER_VALUE] = ColorPair(Green,Black),
       [LED_COLOR] = ColorPair(Green,Black),
       [TASKS_RUNNING] = A_BOLD | ColorPair(Green,Black),
+      [TEMPERATURE_COOL] = A_DIM | ColorPair(Green,Black),
+      [TEMPERATURE_MEDIUM] = A_NORMAL | ColorPair(Yellow,Black),
+      [TEMPERATURE_HOT] = A_BOLD | ColorPair(Red,Black),
       [PROCESS] = ColorPair(Cyan,Black),
       [PROCESS_SHADOW] = A_BOLD | ColorPairGrayBlack,
       [PROCESS_TAG] = A_BOLD | ColorPair(Yellow,Black),

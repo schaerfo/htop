@@ -40,6 +40,7 @@ EnvScreen.h InfoScreen.h XAlloc.h Macros.h
 # -----
 
 linux_platform_headers = \
+    TemperatureMeter.h \
 	linux/Platform.h \
 	linux/IOPriorityPanel.h \
 	linux/IOPriority.h \
@@ -54,7 +55,7 @@ linux_platform_headers = \
 
 if HTOP_LINUX
 AM_LDFLAGS += -rdynamic
-myhtopplatsources = linux/Platform.c linux/IOPriorityPanel.c \
+myhtopplatsources = TemperatureMeter.c linux/Platform.c linux/IOPriorityPanel.c \
 linux/LinuxProcess.c linux/LinuxProcessList.c linux/LinuxCRT.c linux/Battery.c \
 linux/PressureStallMeter.c \
 zfs/ZfsArcMeter.c zfs/ZfsCompressedArcMeter.c zfs/ZfsArcStats.c
