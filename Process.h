@@ -28,7 +28,7 @@ in the source distribution for its full text.
 
 #include "Object.h"
 
-#include <sys/types.h>
+#include <sys/sysmacros.h>
 
 #define PROCESS_FLAG_IO 0x0001
 
