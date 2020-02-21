@@ -49,8 +49,9 @@ static void TemperatureMeter_display(Object* cast, RichString* out) {
    char *tstart = NULL, *tend = NULL;
    int  temperature;
    while ((read = getline(&line, &len, p)) != -1) {
-      // contains this line a core-temperature?
+      // contains this line a core or die temperature?
       entry = strstr(line, "Core ");
+      if (entry == NULL) entry = strstr(line, "Tdie:");
       if (entry == NULL) continue;
 
       // find the begin of the temperature value
