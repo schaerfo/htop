@@ -39,7 +39,8 @@ static void CPUMeter_updateValues(Meter* this, char* buffer, int size) {
    }
    memset(this->values, 0, sizeof(double) * CPU_METER_ITEMCOUNT);
    double percent = Platform_setCPUValues(this, cpu);
-   if (this->pl->settings->showCPUFrequency) {
+   // Always show percentage for average meter
+   if (this->pl->settings->showCPUFrequency && cpu) {
       double cpuFrequency = this->values[CPU_METER_FREQUENCY];
       char cpuFrequencyBuffer[16];
       if (cpuFrequency < 0) {
@@ -52,7 +53,7 @@ static void CPUMeter_updateValues(Meter* this, char* buffer, int size) {
       } else {
          xSnprintf(buffer, size, "%s", cpuFrequencyBuffer);
       }
-   } else if (this->pl->settings->showCPUUsage) {
+   } else if (this->pl->settings->showCPUUsage || !cpu) {
       xSnprintf(buffer, size, "%5.1f%%", percent);
    } else if (size > 0) {
       buffer[0] = '\0';
