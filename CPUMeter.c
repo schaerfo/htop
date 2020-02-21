@@ -63,7 +63,9 @@ static void CPUMeter_updateValues(Meter* this, char* buffer, int size) {
    }
    memset(this->values, 0, sizeof(double) * CPU_METER_ITEMCOUNT);
    double percent = Platform_setCPUValues(this, cpu);
-   if (this->pl->settings->showClockRate) {
+   
+   // Always show percentage for average meter
+   if (this->pl->settings->showClockRate && cpu) {
       xSnprintf(buffer, size, "%5.1lfMHz", this->clockRate);
    } else {
       xSnprintf(buffer, size, "%5.1f%%", percent);
