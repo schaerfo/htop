@@ -51,6 +51,7 @@ static void TemperatureMeter_display(Object* cast, RichString* out) {
    while ((read = getline(&line, &len, p)) != -1) {
       // contains this line a core or die temperature?
       entry = strstr(line, "Core ");
+      if (entry == NULL) entry = strstr(line, "Tccd");
       if (entry == NULL) entry = strstr(line, "Tdie:");
       if (entry == NULL) continue;
 
